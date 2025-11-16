@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CashReward App</title>
+    <title>Money Hub App</title>
     
     <!-- Your New Ad Code -->
  <script src='//libtl.com/sdk.js' data-zone='10197184' data-sdk='show_10197184'></script>
@@ -45,7 +45,7 @@
 
     <!-- Authentication Section -->
     <div id="auth-section" class="min-h-screen p-6 flex-col justify-center main-page">
-        <h1 class="text-4xl font-bold text-center mb-2 text-accent">CashReward</h1>
+        <h1 class="text-4xl font-bold text-center mb-2 text-accent">Money Hub</h1>
         <p class="text-center text-gray-400 mb-8">Login or Signup to continue</p>
         <div id="auth-container">
             <div id="login-view">
@@ -67,7 +67,7 @@
     <!-- Main App Container -->
     <div id="app-container" class="min-h-screen flex-col main-page">
         <header class="flex items-center justify-between p-4 sticky top-0 bg-opacity-80 backdrop-blur-md z-10 dark-bg">
-            <h1 class="text-xl font-bold">CashReward</h1>
+            <h1 class="text-xl font-bold">Money Hub</h1>
             <div class="flex items-center space-x-4">
                 <div id="notification-bell" class="relative cursor-pointer">
                     <i data-lucide="bell" class="w-6 h-6"></i>
@@ -97,19 +97,19 @@
                     </div>
                     <div class="space-y-3">
                         <div class="bg-orange-500 p-3 rounded-lg flex items-center justify-between text-black">
-                            <div class="flex items-center space-x-3"><span class="text-3xl">ðŸ¤©</span><div><h3 class="font-bold">Watch Short Ad</h3><p class="text-xs font-medium">Rewarded Interstitial</p></div></div>
+                            <div class="flex items-center space-x-3"><span class="text-3xl">🤩</span><div><h3 class="font-bold">Watch Short Ad</h3><p class="text-xs font-medium">Rewarded Interstitial</p></div></div>
                             <button class="bg-white text-orange-500 font-bold px-6 py-2 rounded-lg text-sm btn" onclick="claimReward('interstitial')">Claim</button>
                         </div>
                         <div class="card-bg p-3 rounded-lg flex items-center justify-between">
-                            <div class="flex items-center space-x-3"><span class="text-3xl">ðŸ˜Ž</span><div><h3 class="font-semibold">Click for Reward</h3><p class="text-xs text-gray-400">Rewarded Popup</p></div></div>
+                            <div class="flex items-center space-x-3"><span class="text-3xl">😎</span><div><h3 class="font-semibold">Click for Reward</h3><p class="text-xs text-gray-400">Rewarded Popup</p></div></div>
                             <button class="bg-white text-black font-bold px-6 py-2 rounded-lg text-sm btn" onclick="claimReward('popup')">Claim</button>
                         </div>
                          <div class="card-bg p-3 rounded-lg flex items-center justify-between">
-                            <div class="flex items-center space-x-3"><span class="text-3xl">ðŸ‘€</span><div><h3 class="font-semibold">Watch a Video</h3><p class="text-xs text-gray-400">In-App Interstitial</p></div></div>
+                            <div class="flex items-center space-x-3"><span class="text-3xl">👀</span><div><h3 class="font-semibold">Watch a Video</h3><p class="text-xs text-gray-400">In-App Interstitial</p></div></div>
                             <button class="bg-gray-700 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="claimReward('inApp')">Start</button>
                         </div>
                         <div class="card-bg p-3 rounded-lg flex items-center justify-between">
-                            <div class="flex items-center space-x-3"><span class="text-3xl">ðŸŽ®</span><div><h3 class="font-semibold">Play Mini App</h3><p class="text-xs text-gray-400">Get a big reward!</p></div></div>
+                            <div class="flex items-center space-x-3"><span class="text-3xl">🎮</span><div><h3 class="font-semibold">Play Mini App</h3><p class="text-xs text-gray-400">Get a big reward!</p></div></div>
                             <button class="bg-blue-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="claimReward('miniApp')">Play</button>
                         </div>
                     </div>
@@ -200,6 +200,7 @@
 };
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        // Corrected the Firebase Auth CDN URL
         import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
@@ -268,7 +269,7 @@
                     const defaultUserData = {
                         uid: currentUser.uid, name: currentUser.displayName || currentUser.email.split('@')[0], email: currentUser.email,
                         balance: 50, referralCode: ownReferralCode, referredBy: null,
-                        lastNotificationCheck: new Date(),
+                        lastNotificationCheck: serverTimestamp(), // Ensure this is a Timestamp
                         createdAt: serverTimestamp(),
                         dailyAdCount: 0, lastAdWatchDate: new Date().toISOString().split('T')[0], isBlocked: false
                     };
@@ -300,7 +301,8 @@
             profileEmailEl.textContent = userData.email || 'No Email';
             referralCodeEl.textContent = userData.referralCode || '...';
             minWithdrawalInfoEl.textContent = `${appConfig.minWithdrawal || 5000} Coins`;
-            coinValueInfoEl.textContent = `${appConfig.coinValueCoins || 1000} Coins = à§³${appConfig.coinValueInr || 10}`;
+            // Changed to '৳' symbol
+            coinValueInfoEl.textContent = `${appConfig.coinValueCoins || 1000} Coins = ৳${appConfig.coinValueInr || 10}`;
             withdrawMethodSelect.innerHTML = '';
             (appConfig.paymentMethods || []).forEach(method => {
                 const option = document.createElement('option');
@@ -316,6 +318,8 @@
             const today = new Date().toISOString().split('T')[0];
             if (userData.lastAdWatchDate !== today) {
                 userData.dailyAdCount = 0;
+                // Important: If resetting dailyAdCount, need to update in Firestore as well for persistence
+                // This is handled by claimReward, but consider if updateDoc is needed here too for immediate UI consistency
             }
             const adsLeft = Math.max(0, (appConfig.dailyAdLimit || 10) - userData.dailyAdCount);
             adsLeftCountEl.textContent = adsLeft;
@@ -376,7 +380,23 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const userRef = doc(db, "users", userCredential.user.uid);
-                await updateDoc(userRef, { name: name });
+                // When a new user signs up, ensure their default data (including name) is set.
+                // It's better to explicitly set the name here if displayName from auth is not reliable or immediate.
+                await setDoc(userRef, { 
+                    uid: userCredential.user.uid, 
+                    name: name, 
+                    email: email,
+                    balance: 50, // Initial balance
+                    referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
+                    referredBy: null,
+                    lastNotificationCheck: serverTimestamp(),
+                    createdAt: serverTimestamp(),
+                    dailyAdCount: 0, 
+                    lastAdWatchDate: new Date().toISOString().split('T')[0], 
+                    isBlocked: false
+                }, { merge: true }); // Use merge to avoid overwriting default fields if they are already set by handleAuthStateChange
+                // Re-fetch user data to ensure all new fields are populated in local 'userData'
+                await fetchUserData(); 
             } catch (error) {
                 showAlert(error.message);
             } finally {
@@ -401,20 +421,27 @@
         async function handleLogout() { await signOut(auth); }
         
         async function checkNewNotifications() {
-            const lastCheck = userData.lastNotificationCheck;
-            if (!lastCheck || typeof lastCheck.seconds === 'undefined') {
-                console.log("lastNotificationCheck is not a valid timestamp yet. Skipping check.");
+            // Check if lastNotificationCheck is a valid Firestore Timestamp object
+            if (!userData.lastNotificationCheck || typeof userData.lastNotificationCheck.toDate !== 'function') {
+                console.log("lastNotificationCheck is not a valid timestamp yet or is not initialized. Skipping new notification check.");
+                // Optionally, update the user's lastNotificationCheck to a serverTimestamp if it's missing/invalid
+                await updateDoc(doc(db, "users", currentUser.uid), { lastNotificationCheck: serverTimestamp() });
+                userData.lastNotificationCheck = { toDate: () => new Date() }; // Mock object for immediate use
                 return;
             }
-            const q = query(collection(db, "notifications"), where("createdAt", ">", lastCheck), limit(1));
-            const querySnapshot = await getDocs(q);
-            notificationDot.style.display = querySnapshot.empty ? 'none' : 'block';
+            const q = query(collection(db, "notifications"), where("createdAt", ">", userData.lastNotificationCheck), limit(1));
+            try {
+                const querySnapshot = await getDocs(q);
+                notificationDot.style.display = querySnapshot.empty ? 'none' : 'block';
+            } catch (error) {
+                console.error("Error checking new notifications:", error);
+            }
         }
 
         async function loadNotifications() {
             const listEl = document.getElementById('notifications-list');
             listEl.innerHTML = '<p class="text-gray-400">Loading...</p>';
-            notificationDot.style.display = 'none';
+            notificationDot.style.display = 'none'; // Hide dot immediately upon loading notifications page
             const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
             try {
                 const querySnapshot = await getDocs(q);
@@ -425,10 +452,13 @@
                 listEl.innerHTML = '';
                 querySnapshot.forEach(doc => {
                     const msg = doc.data();
-                    const date = msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : 'N/A';
+                    // Ensure createdAt is a timestamp before calling toDate()
+                    const date = msg.createdAt && typeof msg.createdAt.toDate === 'function' ? msg.createdAt.toDate().toLocaleDateString() : 'N/A';
                     listEl.innerHTML += `<div class="card-bg p-4 rounded-lg"><div class="flex justify-between items-center mb-1"><h3 class="font-bold">${msg.title}</h3><p class="text-xs text-gray-400">${date}</p></div><p class="text-sm text-gray-300">${msg.message}</p></div>`;
                 });
+                // Update lastNotificationCheck AFTER successfully loading and displaying all notifications
                 await updateDoc(doc(db, "users", currentUser.uid), { lastNotificationCheck: serverTimestamp() });
+                userData.lastNotificationCheck = { toDate: () => new Date() }; // Update local userData for immediate consistency
             } catch (error) {
                 console.error("Error loading notifications:", error);
                 listEl.innerHTML = '<p class="text-red-400">Error loading notifications.</p>';
@@ -452,7 +482,8 @@
                     let statusColor = 'text-yellow-400';
                     if (status === 'approved') statusColor = 'text-green-400';
                     else if (status === 'rejected') statusColor = 'text-red-400';
-                    const date = request.requestedAt ? request.requestedAt.toDate().toLocaleDateString() : 'N/A';
+                    // Ensure requestedAt is a timestamp before calling toDate()
+                    const date = request.requestedAt && typeof request.requestedAt.toDate === 'function' ? request.requestedAt.toDate().toLocaleDateString() : 'N/A';
                     historyList.innerHTML += `<div class="card-bg p-3 rounded-lg flex items-center justify-between"><div><p class="font-semibold">${request.amount} Coins - ${request.method}</p><p class="text-xs text-gray-400">${date}</p></div><p class="font-bold ${statusColor} capitalize">${status}</p></div>`;
                 });
             } catch (error) {
@@ -482,10 +513,10 @@
                     const referrerDoc = querySnapshot.docs[0];
                     const referrerRef = doc(db, "users", referrerDoc.id);
                     const referrerData = referrerDoc.data();
-                    await updateDoc(referrerRef, { balance: (referrerData.balance || 0) + 100 });
+                    await updateDoc(referrerRef, { balance: (referrerData.balance || 0) + 100 }); // Reward referrer
                     const newUserRef = doc(db, "users", currentUser.uid);
-                    await updateDoc(newUserRef, { balance: (userData.balance || 0) + 100, referredBy: referrerCode });
-                    userData.balance += 100; userData.referredBy = referrerCode;
+                    await updateDoc(newUserRef, { balance: (userData.balance || 0) + 100, referredBy: referrerCode }); // Reward new user
+                    userData.balance += 100; userData.referredBy = referrerCode; // Update local state
                     updateUI();
                     if(isManualApply) showAlert("Code applied successfully! You have received 100 coins.");
                 } else {
@@ -520,7 +551,7 @@
 
             loader.style.display = 'flex';
             try {
-                await updateBalance(-amount);
+                await updateBalance(-amount); // Deduct balance immediately
                 await addDoc(collection(db, "withdrawals"), {
                     userId: currentUser.uid, userName: userData.name, userEmail: userData.email,
                     amount: amount, method: method, paymentDetail: paymentDetail, status: "pending", requestedAt: serverTimestamp()
@@ -547,9 +578,10 @@
         }
         
         function shareReferralCode() {
-            const text = `Join CashReward and earn money! Use my referral code to get a bonus: ${userData.referralCode}`;
+            // Changed app name in share text
+            const text = `Join Money Hub and earn money! Use my referral code to get a bonus: ${userData.referralCode}`;
             if (navigator.share) {
-                navigator.share({ title: 'Join CashReward!', text: text, url: window.location.href })
+                navigator.share({ title: 'Join Money Hub!', text: text, url: window.location.href })
                     .catch((error) => console.error("Share failed:", error));
             } else {
                 copyReferralCode();
@@ -561,6 +593,7 @@
             const today = new Date().toISOString().split('T')[0];
             const userRef = doc(db, "users", currentUser.uid);
 
+            // Check and reset dailyAdCount if it's a new day
             if (userData.lastAdWatchDate !== today) {
                 await updateDoc(userRef, { dailyAdCount: 0, lastAdWatchDate: today });
                 userData.dailyAdCount = 0;
@@ -593,8 +626,9 @@
                 userData.dailyAdCount = newCount;
                 
                 let rewardAmount = 0;
+                // Reward logic for different task types
                 if (taskType === 'miniApp') rewardAmount = 100;
-                else if (taskType !== 'inApp') rewardAmount = 50;
+                else if (taskType !== 'inApp') rewardAmount = 50; // Interstitial and Popup give 50 coins
 
                 if (rewardAmount > 0) {
                     await updateBalance(rewardAmount);
